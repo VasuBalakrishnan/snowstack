@@ -133,3 +133,5 @@ obj/
 
 .azure
 .DS_Store
+
+snowsql_rt.log*
