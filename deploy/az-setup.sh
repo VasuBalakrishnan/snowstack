@@ -12,6 +12,10 @@ az group create --name $RG_NAME --location=$LOCATION --output table
 # Storage Account
 az storage account create -n $STORAGE_NAME -g $RG_NAME --kind StorageV2 -l $LOCATION -t Account
 
+az storage container create -n root --account-name $STORAGE_NAME
+
+az storage copy -s ../data/esg --account-name $STORAGE_NAME --destination-container root --recursive
+
 # Data Factory
 az datafactory factory create --location $LOCATION --name $DATAFACTORY_NAME --resource-group $RG_NAME
 

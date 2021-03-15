@@ -132,3 +132,4 @@ bin/
 obj/
 
 .azure
+.DS_Store
