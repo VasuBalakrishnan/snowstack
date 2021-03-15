@@ -1,5 +1,7 @@
 create database if not exists esg;
 
+use database esg;
+
 create or replace file format csvformat
 type = 'csv'
 field_delimiter = ','
@@ -123,3 +125,13 @@ create or replace table esg_country
 "Latest trade data" string,
 DUMMY string
 );
+
+create or replace stage azure_blob_stage
+    url = 'azure://stosnowstack.blob.core.windows.net/root/esg'
+    credentials = (azure_sas_token = '&azure_sas_token')
+    file_format = csvformat;
+
+copy into esg_country
+    from @azure_blob_stage/ESGCountry.csv
+    file_format = (format_name = csvformat)
+    on_error = 'skip_file';
