@@ -1,3 +1,5 @@
+!set variable_substitution=true;
+
 create database if not exists esg;
 
 use database esg;
@@ -127,7 +129,7 @@ DUMMY string
 );
 
 create or replace stage azure_blob_stage
-    url = 'azure://stosnowstack.blob.core.windows.net/root/esg'
+    url = '&azure_storage_location'
     credentials = (azure_sas_token = '&azure_sas_token')
     file_format = csvformat;
 
@@ -135,3 +137,17 @@ copy into esg_country
     from @azure_blob_stage/ESGCountry.csv
     file_format = (format_name = csvformat)
     on_error = 'skip_file';
+
+create or replace storage integration azure_blob_storage_integration
+type = external_stage
+storage_provider = azure
+enabled = true
+azure_tenant_id = '&azure_tenant_id'
+storage_allowed_locations = ('&azure_storage_location');
+
+create or replace notification integration azure_evt_grid_notification
+enabled = true
+type = queue
+notification_provider = azure_storage_queue
+azure_storage_queue_primary_uri = 'https://stosnowstack.queue.core.windows.net/stosnowstackqueue'
+azure_tenant_id = '&azure_tenant_id';
