@@ -11,18 +11,6 @@ namespace S3CreateAndList
     {
         static async Task Main(string[] args)
         {
-            // var options = new CredentialProfileOptions
-            // {
-            //     AccessKey = "AKIA3TQLPOGGNR3QZHVS",
-            //     SecretKey = "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"
-            // };
-
-            // var profile = new CredentialProfile("shared_profile", options);
-            // profile.Region = RegionEndpoint.USEast1;
-
-            // var sharedFile = new SharedCredentialsFile();
-            // sharedFile.RegisterProfile(profile);
-
             var client = new AmazonS3Client();
 
             if (GetBucketName(args, out var bucketName))
